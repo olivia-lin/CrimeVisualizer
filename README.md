@@ -26,3 +26,8 @@ The app will be based on crime data for 68 US cities, over the period of 1975-20
 John Doe is the Secretary of Public Safety and Homeland Security of the State of New Mexico, and is currently dealing with a major political crisis as he is seeing the number of violent crimes skyrocket in the state over the past decade. Being the officer in charge of the Police, he needs to deal with limited budgets, insufficient human resources as well as constant societal pressure. This situation has become a nightmare for him and he needs to provide an immediate response to address the problem. The first step is to improve his understanding of the current situation by being able to visualize crime data in a fast and effective way.
 
 When John Doe logs in the Crime Visualizer, he is able to quickly visualize the yearly evolution of the number of crimes by city, compare it with the average values for different states as well as an aggregate of the whole country. Also, he will have the types of crimes broken down in different graphs, which will enable him to take different measures for different cities according to each one's most critical problems.
+
+
+### 4 - Description of App & Sketch 
+
+<img src = "plan.png">
