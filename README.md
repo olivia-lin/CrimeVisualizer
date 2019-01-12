@@ -30,4 +30,6 @@ When John Doe logs in the Crime Visualizer, he is able to quickly visualize the 
 
 ### 4 - Description of App & Sketch 
 
-<img src = "plan.png">
+The app contains a landing page that shows the number of crimes per 100k population over years (bar charts) for both different type of crimes and the total of different crimes of different regions (state and city level) and year ranges. Filters are on the left side of the interface, which users can partition the dataset based on the location and year they are interested in. From a drop-down list (state), users can filter out states from the graphs on the right. If users don’t select any state and city, the default is set to be showing the average of all states. Another drop-down list (city) will be updated interactively based on users’ selection of state; it will display the cities, that we have data on, of the state that users selected before.  If users don’t select a city, the default is set to be showing the average of all cities. From the slider bar input (year), users can select the range of years to display.  Plots are on the right side of the interface. Users can compare the number of crimes for different types and for total through the app interface.
+
+<img src = "sketch.png">
