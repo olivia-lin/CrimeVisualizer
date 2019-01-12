@@ -12,14 +12,8 @@ Public safety is one of the main factors impacting the quality of life of citize
 
 ### 2 - Description of the Data
 
-The app will be based on crime data for 68 US cities, over the period of 1975-2015, covering four types of violent crimes: homicides, rape, robbery and aggravated assault. The data was collected and curated by [The Marshall Project](https://www.themarshallproject.org/) and contains 2830 data points, each one being the crime data for a particular city and year. Among the provided information is:
-- City
-- Year
-- Population
-- Number of homicides
-- Number of rape crimes
-- Number of robberies
-- Number of aggravated assaults
+The app will be based on crime data for 68 US cities, over the period of 1975-2015, covering four types of violent crimes: homicides, rape, robbery and aggravated assault. The data was collected and curated by [The Marshall Project](https://www.themarshallproject.org/) and contains 2830 data points, each one being the crime data for a particular city and year. Each data point has 7 associated variables that describe the demographic information of the data point (year, city, city population), the raw numbers of different crimes (homs_sum, rape_sum, rob_sum, agg_ass_sum), the normalized numbers of different crimes (homs_per_100k, rape_per_100k, rob_per_100k, agg_ass_per_100k), and the number of crimes for all four crime types (violent_crime, violent_per_100k). Using this data we will also derive a new variable, which is the state of each data point.
+
 
 ### 3 - Usage Scenario & Tasks
 
@@ -30,4 +24,6 @@ When John Doe logs in the Crime Visualizer, he is able to quickly visualize the 
 
 ### 4 - Description of App & Sketch 
 
-<img src = "plan.png">
+The app contains a landing page that shows the number of crimes per 100k population over years (bar charts) for both different type of crimes and the total of different crimes of different regions (state and city level) and year ranges. Filters are on the left side of the interface, which users can partition the dataset based on the location and year they are interested in. From a drop-down list (state), users can filter out states from the graphs on the right. If users don’t select any state and city, the default is set to be showing the average of all states. Another drop-down list (city) will be updated interactively based on users’ selection of state; it will display the cities, that we have data on, of the state that users selected before.  If users don’t select a city, the default is set to be showing the average of all cities. From the slider bar input (year), users can select the range of years to display.  Plots are on the right side of the interface. Users can compare the number of crimes for different types and for total through the app interface.
+
+<img src = "sketch.png">
