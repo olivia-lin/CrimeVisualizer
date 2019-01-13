@@ -1,8 +1,8 @@
 # Crime Visualizer
 
 Team:
-- Gabriel Bogo
-- Olivia Lin
+- [Gabriel Bogo](https://github.com/GabrielBogo)
+- [Olivia Lin](https://github.com/olivia-lin)
 
 ## Proposal
 
@@ -22,8 +22,8 @@ John Doe is the Secretary of Public Safety and Homeland Security of the State of
 When John Doe logs in the Crime Visualizer, he is able to quickly visualize the yearly evolution of the number of crimes by city, compare it with the average values for different states as well as an aggregate of the whole country. Also, he will have the types of crimes broken down in different graphs, which will enable him to take different measures for different cities according to each one's most critical problems.
 
 
-### 4 - Description of App & Sketch 
+### 4 - Description of App & Sketch
 
-The app contains a landing page that shows the number of crimes per 100k population over years (bar charts) for both different type of crimes and the total of different crimes of different regions (state and city level) and year ranges. Filters are on the left side of the interface, which users can partition the dataset based on the location and year they are interested in. From a drop-down list (state), users can filter out states from the graphs on the right. If users don’t select any state and city, the default is set to be showing the average of all states. Another drop-down list (city) will be updated interactively based on users’ selection of state; it will display the cities, that we have data on, of the state that users selected before.  If users don’t select a city, the default is set to be showing the average of all cities. From the slider bar input (year), users can select the range of years to display.  Plots are on the right side of the interface. Users can compare the number of crimes for different types and for total through the app interface.
+The app contains a landing page that shows bar charts of the number of crimes per 100k citizens over the years, broken down into different types of crimes. One extra chart provides an overall picture by summing up all different types of crimes. To zero in on more specific information, filters are available on the left side of the interface, allowing users to partition the data based on a particular location and year range that they are interested in. For example, users can select a specific state from a drop-down list and see the filtered information on the graphs. If users don’t select any state and city, the default is set to be showing the average of all states. Another drop-down list for cities will be updated interactively based on users’ state of choice - it will display only the cities belonging to the state that was selected before. This will improve the user experience, making it easier for them to browse through the multitude of options. If users don’t select a city, the default is set to be showing the average of all cities. From the slider bar input (year), users can select the range of years to display.  Plots are on the right side of the interface. Overall, users can use the app interface to easily visualize the number of crimes for different types, in different regions, assess their yearly evolution and see how they compare among themselves and to global averages.
 
 <img src = "sketch.png">
