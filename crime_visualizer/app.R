@@ -2,7 +2,14 @@ library(shiny)
 library(tidyverse)
 library(here)
 
-clean_data <- read_csv(here("data", "ucr_crime_1975_2015.csv"))
+clean_data <- read_csv(here("data", "clean_data.csv"))
+list_states <- clean_data %>% 
+                    distinct(state_name) %>% 
+                    arrange(state_name)
+list_cities <- clean_data %>%
+                    distinct(city_name) %>%
+                    arrange(city_name)
+                
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -12,18 +19,15 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             selectInput("state", h4("State"), 
-                        choices = list("Choice 1" = 1, "Choice 2" = 2,
-                                       "Choice 3" = 3), selected = 1),
+                        choices = list_states),
             selectInput("city", h4("City"), 
-                        choices = list("Choice 1" = 1, "Choice 2" = 2,
-                                       "Choice 3" = 3), selected = 1),
-            dateRangeInput('dateRange',
-                            label = h4('Date range'),
-                            start = Sys.Date() - 2, end = Sys.Date() + 2)
+                        choices = list_cities),
+            sliderInput("dateRange", h4("DateRange"),
+                        min = 1975, max = 2015, value = c(1975, 2015))
 
         ),
-        mainPanel(#plotOutput("price_hist"),
-                  #tableOutput("price_table")
+        mainPanel(plotOutput("robbery"),
+                  tableOutput("reactive_data")
         ),
     )
 )
@@ -35,29 +39,37 @@ server <- function(input, output) {
     observe(print(input$state))
     observe(print(input$city))
     observe(print(input$dateRange))
-    # 
+    
+    # updateSelectInput(session, city, choices = cities_choice)
+
     reactive_data <- reactive(clean_data %>% 
                                   filter(year >= input$dateRange[1],
                                          year <= input$dateRange[2],
-                                         state == input$state,
-                                         city == input$city) %>% 
-                                  group_by(state, city, year) %>% 
+                                         state_name == input$state,
+                                         city_name == input$city) %>% 
+                                  group_by(state_name, city_name, year) %>% 
                                   summarize(total_homs = sum(homs_sum),
                                             total_rape = sum(rape_sum),
                                             total_rob = sum(rob_sum),
                                             total_agg_ass = sum(agg_ass_sum),
-                                            total = sum)
+                                            total = sum(violent_crime),
+                                            sum_pop = sum(total_pop),
+                                            wa_homs_per_100k = 100000 * total_homs / sum_pop,
+                                            wa_rape_per_100k = 100000 * total_rape / sum_pop,
+                                            wa_rob_per_100k = 100000 * total_rob / sum_pop,
+                                            wa_agg_ass_per_100k = 100000 * total_agg_ass / sum_pop
+                                            )
                               )
-    # 
+    
     output$robbery <- renderPlot(
         reactive_data() %>%
-            ggplot(aes(Price)) +
-            geom_histogram()
+            ggplot(aes(y = wa_rob_per_100k, x = year)) +
+            geom_col()
     )
     # 
-    # output$price_table <- renderTable(
-    #     bcl_filtered()
-    # )
+    output$reactive_data <- renderTable(
+        reactive_data()
+    )
     output$dateRangeText  <- renderText({
         paste("input$dateRange is", 
               paste(as.character(input$dateRange), collapse = " to ")
