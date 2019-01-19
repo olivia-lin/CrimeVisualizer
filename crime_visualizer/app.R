@@ -44,7 +44,7 @@ ui <- fluidPage(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output, session) {
+server <- function(input, output) {
     
     list_cities <- reactive({
         if (input$state == "All") {
@@ -67,7 +67,6 @@ server <- function(input, output, session) {
     reactive_data <- reactive({
         if (input$state == "All"){
             clean_data %>% 
-                na.omit() %>% 
                 filter(year >= input$dateRange[1],
                        year <= input$dateRange[2]) %>% 
                 group_by(year) %>% 
@@ -122,52 +121,32 @@ server <- function(input, output, session) {
         }
 
     })
-    
-    observe(print(reactive_data()))
+    crime_types <- tribble(
+        ~name, ~title, ~variable,
+        "homs",   "Homicides", "wa_homs_per_100k",
+        "rape",   "Rapes", "wa_rape_per_100k",
+        "rob",   "Robberies", "wa_rob_per_100k",
+        "agg_ass",   "Aggravated Assaults", "wa_agg_ass_per_100k"
+    )
 
-    output$homs <- renderPlot(
-        reactive_data() %>%
-            ggplot(aes(y = wa_homs_per_100k, x = year)) +
-            geom_col(fill="#386cb0", color="#386cb0") +
-            ggtitle("Homicides") +
-            ylab("Per 100k citizens") +
-            theme_minimal() +
-            theme(plot.title = element_text(size = 15, face = "bold")) +
-            theme(plot.title = element_text(hjust = 0.5))
-    )
-    
-    output$rape <- renderPlot(
-        reactive_data() %>%
-            ggplot(aes(y = wa_rape_per_100k, x = year)) +
-            geom_col(fill="#386cb0", color="#386cb0") +
-            ggtitle("Rapes") +
-            ylab("Per 100k citizens") +
-            theme_minimal() +
-            theme(plot.title = element_text(size = 15, face = "bold")) +
-            theme(plot.title = element_text(hjust = 0.5))
-    )
-    
-    output$rob <- renderPlot(
-        reactive_data() %>%
-            ggplot(aes(y = wa_rob_per_100k, x = year)) +
-            geom_col(fill="#386cb0", color="#386cb0") +
-            ggtitle("Robberies") +
-            ylab("Per 100k citizens") +
-            theme_minimal() +
-            theme(plot.title = element_text(size = 15, face = "bold")) +
-            theme(plot.title = element_text(hjust = 0.5))
-    )
-    
-    output$agg_ass <- renderPlot(
-        reactive_data() %>%
-            ggplot(aes(y = wa_agg_ass_per_100k, x = year)) +
-            geom_col(fill="#386cb0", color="#386cb0") +
-            ggtitle("Aggravated Assaults") +
-            ylab("Per 100k citizens") +
-            theme_minimal() +
-            theme(plot.title = element_text(size = 15, face = "bold")) +
-            theme(plot.title = element_text(hjust = 0.5))
-    )
+    for (i in 1:nrow(crime_types)) {
+        local({
+        c <- crime_types$name[[i]]
+        title <- crime_types$title[[i]]
+        var <- crime_types$variable[[i]]
+
+        output[[c]] <- renderPlot(
+            reactive_data() %>%
+                ggplot(aes_string(y = var, x = "year")) +
+                geom_line(color="#386cb0") +
+                geom_point(shape="square", size=2, color="#253494") +
+                ggtitle(title) +
+                ylab("Per 100k citizens") +
+                theme_minimal() +
+                theme(plot.title = element_text(size = 15, face = "bold")) +
+                theme(plot.title = element_text(hjust = 0.5)))
+        })
+    }
     
     output$total <- renderPlot(
         reactive_data() %>%
