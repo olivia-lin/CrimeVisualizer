@@ -27,7 +27,7 @@ only the ones who belong to the chosen state:
 
 ![**Figure 2: Self-updating drop-down list.**](../img/img2.jpg)
 
-Furthermore, we decided to break down the crime numbers into different
+Furthermore, we decided to break the crime numbers down into different
 types of agression (rape, homicide, robbery and aggravated assault). The
 reason for that is that not only is it insightful to see different types
 of crime separetely, but also the scales are very different and lumping
@@ -52,9 +52,9 @@ the new tab:
 
 In this milestone we completed the following tasks:
 
-  - [Data Cleaning](script_clean_data.R)
+  - [Data Cleaning](../script_clean_data.R)
   - Development of a first functional version of the app, fulfilling our
-    proposal [plan](README.md). The main features were:
+    proposal [plan](../README.md). The main features were:
       - Filters for state, city and year
       - Dynamic data wrangling, according to the filters
       - Self-updating drop-down list for cities
