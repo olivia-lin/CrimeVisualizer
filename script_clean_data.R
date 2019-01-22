@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyverse)
+library(forcats)
 
 data <- read_csv("data/ucr_crime_1975_2015.csv")
 
@@ -12,4 +13,16 @@ new_data <- data %>%
   drop_na()
 
 write_csv(new_data, "data/clean_data.csv")
+
+new_data_2 <- new_data %>% 
+  gather(homs_sum, rape_sum, rob_sum, agg_ass_sum, violent_crime, key = "crime", value = "cases") %>% 
+  select(year, total_pop, state_name, city_name, crime, cases) %>% 
+  mutate(crime = as_factor(crime)) %>% 
+  mutate(year = as.factor(year))
+
+new_data_2$crime <- 
+  fct_recode(new_data_2$crime, 'homicides' = 'homs_sum', 'rape' = 'rape_sum', 'robbery' = 'rob_sum', 
+              'aggravated assault' = 'agg_ass_sum', 'total violent crime' = 'violent_crime')
+
+write_csv(new_data_2, "data/clean_data_tidy.csv")
 
