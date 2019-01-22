@@ -33,7 +33,7 @@ Also, to improve the user experience, we implemented a self-updating drop-down l
 
 ![**Figure 2: Self-updating drop-down list.**](../img/img2.jpg)
 
-Furthermore, we decided to break down the crime numbers into different types of agression (rape, homicide, robbery and aggravated assault). The reason for that is that not only is it insightful to see different types of crime separetely, but also the scales are very different and lumping them all together would probably hide nuances about the phenomenon. Moreover, since the data is a clear time-series, line plot is the best choice of geometry - columns ended up too cluttered and we really wanted to emphasize the trend over time over the absolute value of the indicator.
+Furthermore, we decided to break the crime numbers down into different types of agression (rape, homicide, robbery and aggravated assault). The reason for that is that not only is it insightful to see different types of crime separetely, but also the scales are very different and lumping them all together would probably hide nuances about the phenomenon. Moreover, since the data is a clear time-series, line plot is the best choice of geometry - columns ended up too cluttered and we really wanted to emphasize the trend over time over the absolute value of the indicator.
 
 ![**Figure 3: Different graphs for different crime types - scales don't always match.**](../img/img3.jpg)
 
@@ -45,8 +45,8 @@ Still, since we know politicians quite often want simplicity and elegance over a
 
 In this milestone we completed the following tasks:
  
-- [Data Cleaning](script_clean_data.R)
-- Development of a first functional version of the app, fulfilling our proposal [plan](README.md). The main features were:
+- [Data Cleaning](../script_clean_data.R)
+- Development of a first functional version of the app, fulfilling our proposal [plan](../README.md). The main features were:
   - Filters for state, city and year
   - Dynamic data wrangling, according to the filters
   - Self-updating drop-down list for cities
