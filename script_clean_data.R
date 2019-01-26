@@ -24,5 +24,14 @@ new_data_2$crime <-
   fct_recode(new_data_2$crime, 'homicides' = 'homs_sum', 'rape' = 'rape_sum', 'robbery' = 'rob_sum', 
               'aggravated assault' = 'agg_ass_sum', 'total violent crime' = 'violent_crime')
 
-write_csv(new_data_2, "data/clean_data_tidy.csv")
+state_avg <- new_data_2 %>% 
+              group_by(state_name, crime, year) %>% 
+              summarise(avg_case = mean(cases))
 
+state_pop <- new_data_2 %>% 
+                group_by(state_name, year) %>% 
+                summarise(state_pop = sum(total_pop))
+
+new_data_3 <- left_join(left_join(new_data_2, state_avg), state_pop)
+
+write_csv(new_data_3, "data/clean_data_tidy.csv")
