@@ -79,7 +79,7 @@ server <- function(input, output) {
       cols = c("state_name", "city_name", "year", "crime")
     }
     
-    clean_data %>% 
+    clean_data %>%
       filter(year >= input$dateRange[1],
              year <= input$dateRange[2]) %>%
       group_by_at(.vars=vars(cols)) %>% 
@@ -90,7 +90,8 @@ server <- function(input, output) {
         input$state != "All States" & input$city == "All Cities" ~ filter(., state_name == input$state),
         input$state != "All States" & input$city != "All Cities" ~ filter(., state_name == input$state,
                                                                           city_name == input$city),
-        ~ .)
+        ~ .) %>% 
+      mutate(crime = fct_reorder(crime, wa_per_100k))
   })
   
   crime_types <- tribble(
