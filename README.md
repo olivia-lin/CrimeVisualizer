@@ -4,6 +4,11 @@ Team:
 - [Gabriel Bogo](https://github.com/GabrielBogo)
 - [Olivia Lin](https://github.com/olivia-lin)
 
+# Links for feedback given to other groups:
+
+- [Group 1](https://github.com/UBC-MDS/US_Crime_Trend/issues/8)
+- [Group 2](https://github.com/UBC-MDS/mental-health-analysis-and-app/issues/11)
+
 ## Proposal
 
 ### 1 - Overview
