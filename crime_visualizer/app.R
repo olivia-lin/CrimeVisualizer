@@ -131,10 +131,12 @@ server <- function(input, output) {
       ggplot(aes(y = wa_per_100k, x = year)) +
       geom_col(aes(fill = crime)) +
       ggtitle("Total Violent Crimes") +
-      ylab("Per 100k citizens") +
+      ylab("No. of crimes per 100k citizens") +
       theme_minimal() +
       theme(plot.title = element_text(size = 15, face = "bold")) +
-      theme(plot.title = element_text(hjust = 0.5))
+      theme(plot.title = element_text(hjust = 0.5)) + 
+      theme(axis.title = element_text(size = 15),
+            axis.title.x=element_blank()) 
   )
   
   output$reactive_data <- renderTable(
