@@ -132,7 +132,7 @@ server <- function(input, output) {
               theme(axis.text=element_text(size=12)) +
               theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
               theme(legend.text=element_text(size=10)) +
-              theme(legend.position="bottom")
+              theme(legend.position="right")
         
         # generating the line of comparison with State average. Only if the user picked a specific city.
         if (input$state != "All States" & input$city != "All Cities"){
@@ -149,7 +149,7 @@ server <- function(input, output) {
             geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State Average")) +
             scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black")) +
             theme(legend.text=element_text(size=10)) +
-            theme(legend.position="bottom")
+            theme(legend.position="right")
         } 
         
         g # This line is necessary to return the actual plot that will be displayed in the front end
