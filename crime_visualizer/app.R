@@ -145,7 +145,10 @@ server <- function(input, output) {
               theme(plot.title = element_text(size = 15, face = "bold")) +
               theme(plot.title = element_text(hjust = 0.5)) + 
               theme(axis.title = element_text(size = 15),
-                    axis.title.x=element_blank())
+                    axis.title.x=element_blank()) +
+              theme(axis.text=element_text(size=12)) +
+              theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+              theme(legend.text=element_text(size=10))
       
         if (input$state != "All States" & input$city != "All Cities"){
           state_data <- reactive_data() %>%
@@ -160,7 +163,8 @@ server <- function(input, output) {
           g <- g + 
             geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State Average")) +
             # geom_point(data = state_data, aes(y = wa_per_100k_state, x = year), shape="square", size=2, color="#8c510a") +
-            scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black"))
+            scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black")) +
+            theme(legend.text=element_text(size=10))
         } 
         
         g
@@ -180,7 +184,9 @@ server <- function(input, output) {
       theme(plot.title = element_text(size = 15, face = "bold")) +
       theme(plot.title = element_text(hjust = 0.5)) + 
       theme(axis.title = element_text(size = 15),
-            axis.title.x=element_blank())
+            axis.title.x=element_blank()) +
+      theme(axis.text=element_text(size=12)) +
+      theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
   )
   
   output$reactive_data <- renderTable(
