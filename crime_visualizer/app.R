@@ -3,24 +3,10 @@ library(plotly)
 library(tidyverse)
 library(here)
 
+# Load data
 clean_data <- read_csv(here("data", "clean_data_tidy.csv"))
 
-cols = c("state_name", "city_name", "year", "crime")
-# teste <- clean_data %>%
-#   group_by_at(.vars=vars(cols)) %>% 
-#   summarize(sum_cases = sum(cases),
-#             sum_pop = sum(total_pop),
-#             wa_per_100k = 100000 * sum_cases / sum_pop,
-#             avg_state = mean(avg_case)) %>% 
-#   mutate(crime = fct_reorder(crime, wa_per_100k))
-# 
-# state_data <- teste %>%
-#   filter(crime == "homicides") %>% 
-#   group_by(state_name, year, crime) %>% 
-#   summarize(sum_state_crimes = sum(sum_cases),
-#             sum_state_population = sum(sum_pop),
-#             wa_per_100k_state = 100000 * sum_state_crimes / sum_state_population)
-
+# Initial list of states for first drop-down list
 list_states <- clean_data %>% 
   distinct(state_name) %>% 
   arrange(state_name) %>% 
@@ -28,7 +14,6 @@ list_states <- clean_data %>%
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  # h1("Crime Visualizer"),
   titlePanel("Violent Crime Visualizer", 
              windowTitle = "Violent Crime Visualizer"),
   sidebarLayout(
@@ -62,15 +47,12 @@ ui <- fluidPage(
         ),
         tabPanel("Total", plotOutput("total"))
       )
-      
-      
-    )
-  )
-)
+    ) # Close Main Panel
+  ) # Close SideBar Layout
+) # Close Fluid Page 
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-  
+  # Dynamic list of cities for second drop-down list
   list_cities <- reactive({
     if (input$state == "All States") {
       c("All Cities")
@@ -81,9 +63,9 @@ server <- function(input, output) {
         arrange(city_name) %>% 
         add_row(city_name="All Cities", .before=1)
     }
-    
   })
   
+  # The city drop-down list is dynamic - must be rendered in the server and exported to the front
   output$citySelection <- renderUI({
     selectInput("city", h4("City"), choices=list_cities())
   })
@@ -125,19 +107,18 @@ server <- function(input, output) {
     "robbery",   "Robberies",
     "aggravated assault",   "Aggravated Assaults",
   )
-    
   
   for (i in 1:nrow(crime_types)) {
+    # For each iteration, generate plot of a specific crime type
     local({
-      c <- crime_types$name[[i]]
-      title <- crime_types$title[[i]]
+      c <- crime_types$name[[i]] # get crime type
+      title <- crime_types$title[[i]] #get plot title
       
       output[[c]] <- renderPlot({
         g <- city_data() %>%
               filter(crime == c) %>% 
               ggplot(aes(y = wa_per_100k, x = year)) +
               geom_line(aes(y = wa_per_100k, x = year, color="Average")) +
-              # geom_point(shape="square", size=2, color="#253494") +
               ggtitle(title) +
               ylab("No. of crimes per 100k citizens") +
               scale_color_manual(name = "", values = c("Average" = "black")) +
@@ -145,8 +126,12 @@ server <- function(input, output) {
               theme(plot.title = element_text(size = 15, face = "bold")) +
               theme(plot.title = element_text(hjust = 0.5)) + 
               theme(axis.title = element_text(size = 15),
-                    axis.title.x=element_blank())
-      
+                    axis.title.x=element_blank()) +
+              theme(axis.text=element_text(size=12)) +
+              theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0))) +
+              theme(legend.text=element_text(size=10))
+        
+        # generating the line of comparison with State average. Only if the user picked a specific city.
         if (input$state != "All States" & input$city != "All Cities"){
           state_data <- reactive_data() %>%
                           filter(crime == c,
@@ -159,16 +144,17 @@ server <- function(input, output) {
           
           g <- g + 
             geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State Average")) +
-            # geom_point(data = state_data, aes(y = wa_per_100k_state, x = year), shape="square", size=2, color="#8c510a") +
-            scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black"))
+            scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black")) +
+            theme(legend.text=element_text(size=10))
         } 
         
-        g
+        g # This line is necessary to return the actual plot that will be displayed in the front end
         
         })
     })
   }
   
+  #Aggregated plot of all crime types together
   output$total <- renderPlot(
     reactive_data() %>%
       filter(crime != 'total violent crime') %>% 
@@ -180,12 +166,11 @@ server <- function(input, output) {
       theme(plot.title = element_text(size = 15, face = "bold")) +
       theme(plot.title = element_text(hjust = 0.5)) + 
       theme(axis.title = element_text(size = 15),
-            axis.title.x=element_blank())
+            axis.title.x=element_blank()) +
+      theme(axis.text=element_text(size=12)) +
+      theme(axis.title.y = element_text(margin = margin(t = 0, r = 20, b = 0, l = 0)))
   )
   
-  output$reactive_data <- renderTable(
-    reactive_data()
-  )
   output$dateRangeText  <- renderText({
     paste("input$dateRange is", 
           paste(as.character(input$dateRange), collapse = " to ")
