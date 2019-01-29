@@ -1,7 +1,8 @@
 library(shiny)
-library(plotly)
 library(tidyverse)
 library(here)
+library(shinythemes)
+library(plotly)
 
 # Load data
 clean_data <- read_csv(here("data", "clean_data_tidy.csv"))
@@ -14,6 +15,8 @@ list_states <- clean_data %>%
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
+  theme = shinytheme('cosmo'),
+  
   titlePanel("Violent Crime Visualizer", 
              windowTitle = "Violent Crime Visualizer"),
   sidebarLayout(
@@ -35,19 +38,19 @@ ui <- fluidPage(
                    tags$h3("How are crime rates evolving over time?")
                  ),
                  fluidRow(
-                   column(6, plotOutput("homicides")),
-                   column(6, plotOutput("rape")),
+                   column(6, plotlyOutput("homicides")),
+                   column(6, plotlyOutput("rape")),
                    br(),br(),
                    br(),br(),
                    br(),br()
                  ),
                  fluidRow(
-                   column(6, plotOutput("robbery")),
-                   column(6, plotOutput("aggravated assault"))
+                   column(6, plotlyOutput("robbery")),
+                   column(6, plotlyOutput("aggravated assault"))
                  )
                  
         ),
-        tabPanel("Total", plotOutput("total"))
+        tabPanel("Total", plotlyOutput("total"))
       )
     ) # Close Main Panel
   ) # Close SideBar Layout
@@ -88,9 +91,9 @@ server <- function(input, output) {
       group_by_at(.vars=vars(cols)) %>% 
       summarize(sum_cases = sum(cases),
                 sum_pop = sum(total_pop),
-                wa_per_100k = 100000 * sum_cases / sum_pop,
+                number_of_crime = 100000 * sum_cases / sum_pop,
                 avg_state = mean(avg_case)) %>% 
-      mutate(crime = fct_reorder(crime, wa_per_100k))
+      mutate(crime = fct_reorder(crime, number_of_crime))
   })
 
   city_data <- reactive({
@@ -116,11 +119,11 @@ server <- function(input, output) {
       c <- crime_types$name[[i]] # get crime type
       title <- crime_types$title[[i]] #get plot title
       
-      output[[c]] <- renderPlot({
+      output[[c]] <- renderPlotly({
         g <- city_data() %>%
               filter(crime == c) %>% 
-              ggplot(aes(y = wa_per_100k, x = year)) +
-              geom_line(aes(y = wa_per_100k, x = year, color="Average")) +
+              ggplot(aes(y = number_of_crime, x = year)) +
+              geom_line(aes(y = number_of_crime, x = year, color="Average")) +
               ggtitle(title) +
               ylab("No. of crimes per 100k citizens") +
               scale_color_manual(name = "", values = c("Average" = "black")) +
@@ -142,27 +145,27 @@ server <- function(input, output) {
                           group_by(state_name, year, crime) %>% 
                           summarize(sum_state_crimes = sum(sum_cases),
                                     sum_state_population = sum(sum_pop),
-                                    wa_per_100k_state = 100000 * sum_state_crimes / sum_state_population
+                                    number_of_crime_state = 100000 * sum_state_crimes / sum_state_population
                                     )
           
           g <- g + 
-            geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State Average")) +
+            geom_line(data = state_data, aes(y = number_of_crime_state, x = year, color="State Average")) +
             scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black")) +
             theme(legend.text=element_text(size=10)) +
             theme(legend.position="right")
         } 
         
-        g # This line is necessary to return the actual plot that will be displayed in the front end
+        ggplotly(g) # This line is necessary to return the actual plot that will be displayed in the front end
         
         })
     })
   }
   
   #Aggregated plot of all crime types together
-  output$total <- renderPlot(
+  output$total <- renderPlotly(
     reactive_data() %>%
       filter(crime != 'total violent crime') %>% 
-      ggplot(aes(y = wa_per_100k, x = year)) +
+      ggplot(aes(y = number_of_crime, x = year)) +
       geom_col(aes(fill = crime)) +
       ggtitle("Total Violent Crimes") +
       ylab("No. of crimes per 100k citizens") +
