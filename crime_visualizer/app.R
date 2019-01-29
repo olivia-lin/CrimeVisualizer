@@ -41,6 +41,9 @@ ui <- fluidPage(
                  
     ),
     mainPanel(
+      tags$style(type="text/css",
+                 ".shiny-output-error { visibility: hidden; }",
+                 ".shiny-output-error:before { visibility: hidden; }"),
       tabsetPanel(
         tabPanel("Per type of crime",
                  fluidRow(
@@ -133,11 +136,11 @@ server <- function(input, output) {
         g <- city_data() %>%
               filter(crime == c) %>% 
               ggplot(aes(y = wa_per_100k, x = year)) +
-              geom_line(aes(y = wa_per_100k, x = year, color="City average")) +
-              geom_point(shape="square", size=2, color="#253494") +
+              geom_line(aes(y = wa_per_100k, x = year, color="Average")) +
+              # geom_point(shape="square", size=2, color="#253494") +
               ggtitle(title) +
               ylab("No. of crimes per 100k citizens") +
-              scale_color_manual(name = "", values = c("City average" = "#386cc0")) +
+              scale_color_manual(name = "", values = c("Average" = "black")) +
               theme_minimal() +
               theme(plot.title = element_text(size = 15, face = "bold")) +
               theme(plot.title = element_text(hjust = 0.5)) + 
@@ -155,9 +158,9 @@ server <- function(input, output) {
                                     )
           
           g <- g + 
-            geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State average")) +
-            geom_point(data = state_data, aes(y = wa_per_100k_state, x = year), shape="square", size=2, color="#8c510a") +
-            scale_color_manual(name = "", values = c("State average" = "#d95f02", "City average" = "#386cb0"))
+            geom_line(data = state_data, aes(y = wa_per_100k_state, x = year, color="State Average")) +
+            # geom_point(data = state_data, aes(y = wa_per_100k_state, x = year), shape="square", size=2, color="#8c510a") +
+            scale_color_manual(name = "", values = c("State Average" = "red", "Average" = "black"))
         } 
         
         g
